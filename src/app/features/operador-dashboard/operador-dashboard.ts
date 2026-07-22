@@ -94,10 +94,7 @@ export class OperadorDashboard implements OnInit, AfterViewInit {
     this.selectTab('resumen');
   }
 
-  exportPdf() {
-    alert('Generando PDF del reporte del turno...');
-    window.print();
-  }
+  // export removed
 
   logout(): void {
     this.authService.logout();
