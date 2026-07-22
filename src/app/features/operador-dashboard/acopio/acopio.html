@@ -1,0 +1,70 @@
+<div style="animation: fadeIn 0.3s ease-in-out;">
+  <header style="margin-bottom: 24px;">
+    <h2 style="color: var(--gloria-blue-primary); font-size: 20px;">Registro de Nuevo Acopio</h2>
+    <p style="color: var(--text-muted);">Ingresa los datos de la cisterna recibida en planta.</p>
+  </header>
+
+  <div *ngIf="successMessage" class="gloria-card" style="background-color: #E8F5E9; color: #2E7D32; border-left: 4px solid #2E7D32; margin-bottom: 20px;">
+    <strong>¡Éxito!</strong> {{ successMessage }}
+  </div>
+
+  <div *ngIf="errorMessage" class="gloria-card" style="background-color: #FFEBEE; color: #C62828; border-left: 4px solid #C62828; margin-bottom: 20px;">
+    <strong>Error:</strong> {{ errorMessage }}
+  </div>
+
+  <form (ngSubmit)="onSubmit()" #acopioForm="ngForm" class="gloria-card" style="max-width: 600px;">
+    
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px;">
+      <div>
+        <label style="display: block; font-size: 14px; font-weight: 600; color: var(--gloria-blue-primary); margin-bottom: 6px;">Productor / Proveedor</label>
+        <input type="text" [(ngModel)]="formData.productor" name="productor" required
+               style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box;">
+      </div>
+      <div>
+        <label style="display: block; font-size: 14px; font-weight: 600; color: var(--gloria-blue-primary); margin-bottom: 6px;">Cuenca (Origen)</label>
+        <input type="text" [(ngModel)]="formData.cuenca" name="cuenca" required
+               style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box;">
+      </div>
+    </div>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px;">
+      <div>
+        <label style="display: block; font-size: 14px; font-weight: 600; color: var(--gloria-blue-primary); margin-bottom: 6px;">Placa de Cisterna</label>
+        <input type="text" [(ngModel)]="formData.placa_cisterna" name="placa_cisterna" required
+               style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box;" placeholder="Ej: V1D-456">
+      </div>
+    </div>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px;">
+      <div>
+        <label style="display: block; font-size: 14px; font-weight: 600; color: var(--gloria-blue-primary); margin-bottom: 6px;">Volumen (Litros)</label>
+        <input type="number" step="0.01" [(ngModel)]="formData.volumen" name="volumen" required
+               style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box;">
+      </div>
+      <div>
+        <label style="display: block; font-size: 14px; font-weight: 600; color: var(--gloria-blue-primary); margin-bottom: 6px;">Temperatura (°C)</label>
+        <input type="number" step="0.1" [(ngModel)]="formData.temperatura" name="temperatura" required
+               style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box;">
+      </div>
+    </div>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px;">
+      <div>
+        <label style="display: block; font-size: 14px; font-weight: 600; color: var(--gloria-blue-primary); margin-bottom: 6px;">Fecha</label>
+        <input type="date" [(ngModel)]="formData.fecha" name="fecha" required
+               style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box;">
+      </div>
+      <div>
+        <label style="display: block; font-size: 14px; font-weight: 600; color: var(--gloria-blue-primary); margin-bottom: 6px;">Hora</label>
+        <input type="time" [(ngModel)]="formData.hora" name="hora" required
+               style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box;">
+      </div>
+    </div>
+
+    <button type="submit" [disabled]="!acopioForm.valid || isSubmitting" 
+            style="background-color: var(--gloria-blue-primary); color: white; border: none; padding: 12px 24px; border-radius: 4px; cursor: pointer; font-weight: bold; width: 100%; font-size: 16px;"
+            [style.opacity]="!acopioForm.valid || isSubmitting ? '0.6' : '1'">
+      {{ isSubmitting ? 'Guardando...' : 'Registrar Acopio' }}
+    </button>
+  </form>
+</div>

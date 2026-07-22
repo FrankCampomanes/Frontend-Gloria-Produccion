@@ -1,0 +1,26 @@
+<div style="min-height: 100vh; display: flex; align-items: center; justify-content: center;">
+  <div class="gloria-card" style="width: 100%; max-width: 400px; text-align: center;">
+    
+    <h2 style="color: var(--gloria-blue-primary); font-size: 22px; margin-bottom: 4px;">GRUPO GLORIA</h2>
+    <p style="color: var(--text-muted); font-size: 14px; margin-bottom: 24px;">Área de Producción</p>
+    
+    <form (ngSubmit)="onLogin()" style="text-align: left;">
+      <div class="form-group">
+        <label for="email">Correo Institucional</label>
+        <input type="email" id="email" class="form-control" [(ngModel)]="email" name="email" required placeholder="admin@gloria.com.pe">
+      </div>
+      
+      <div class="form-group">
+        <label for="password">Contraseña</label>
+        <input type="password" id="password" class="form-control" [(ngModel)]="password" name="password" required placeholder="••••••••">
+      </div>
+
+      <button type="submit" class="btn-primary" style="margin-top: 10px;">Ingresar</button>
+    </form>
+
+    <div *ngIf="errorMessage" class="badge badge-danger" style="margin-top: 16px; width: 100%; text-align: center; padding: 8px;">
+      {{ errorMessage }}
+    </div>
+
+  </div>
+</div>

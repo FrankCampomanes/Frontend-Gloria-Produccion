@@ -1,1 +1,134 @@
-/* You can add global styles to this file, and also import other style files */
+
+:root {
+  --gloria-blue-primary: #003366;   
+  --gloria-blue-hover: #002244;
+  --gloria-red-accent: #D32F2F;    
+  --bg-main: #F4F6F9;              
+  --bg-card: #FFFFFF;              
+  --text-main: #1A1A1A;            
+  --text-muted: #6C757D;           
+  --border-color: #E2E8F0;         
+  
+  --status-success: #2E7D32;       
+  --status-danger: #C62828;        
+  --status-warning: #EF6C00;       
+  
+  --font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --radius: 8px;                   
+  --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-family);
+  background-color: var(--bg-main);
+  color: var(--text-main);
+  line-height: 1.5;
+}
+
+/* BOTONES */
+.btn-primary {
+  background-color: var(--gloria-blue-primary);
+  color: #FFFFFF;
+  border: none;
+  padding: 10px 18px;
+  border-radius: var(--radius);
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+  width: 100%;
+}
+
+.btn-primary:hover {
+  background-color: var(--gloria-blue-hover);
+}
+
+.btn-primary:active {
+  transform: scale(0.98);
+}
+
+/* FORMULARIOS */
+.form-group {
+  margin-bottom: 16px;
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group label {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-main);
+  margin-bottom: 6px;
+}
+
+.form-control {
+  padding: 10px 12px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius);
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.form-control:focus {
+  border-color: var(--gloria-blue-primary);
+  box-shadow: 0 0 0 3px rgba(0, 51, 102, 0.15);
+}
+
+/* TARJETAS */
+.gloria-card {
+  background: var(--bg-card);
+  border-radius: var(--radius);
+  padding: 20px;
+  box-shadow: var(--shadow);
+  border: 1px solid var(--border-color);
+}
+
+/* TABLAS */
+.gloria-table-container {
+  overflow-x: auto;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  background: var(--bg-card);
+}
+
+.gloria-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: 14px;
+}
+
+.gloria-table th {
+  background-color: var(--gloria-blue-primary);
+  color: #FFFFFF;
+  padding: 12px 16px;
+  font-weight: 600;
+}
+
+.gloria-table td {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.gloria-table tr:hover {
+  background-color: #F8FAFC;
+}
+
+/* BADGES */
+.badge {
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+  display: inline-block;
+}
+
+.badge-success { background-color: #E8F5E9; color: var(--status-success); }
+.badge-danger  { background-color: #FFEBEE; color: var(--status-danger); }
+.badge-warning { background-color: #FFF3E0; color: var(--status-warning); }

@@ -1,0 +1,95 @@
+<div style="animation: fadeIn 0.3s ease-in-out;">
+  <header style="margin-bottom: 24px;">
+    <h2 style="color: var(--gloria-blue-primary); font-size: 20px;">Análisis de Calidad ISO</h2>
+    <p style="color: var(--text-muted);">Selecciona un lote pendiente e ingresa los resultados de laboratorio.</p>
+  </header>
+
+  <div *ngIf="successMessage" class="gloria-card" style="background-color: #E8F5E9; color: #2E7D32; border-left: 4px solid #2E7D32; margin-bottom: 20px;">
+    <strong>¡Análisis Completado!</strong> {{ successMessage }}
+  </div>
+
+  <div style="display: flex; gap: 24px; align-items: flex-start;">
+    
+    <!-- Tabla de Pendientes -->
+    <div class="gloria-card" style="flex: 1; padding: 20px; overflow-x: auto;">
+      <h3 style="margin-top: 0; color: var(--gloria-blue-primary); font-size: 16px;">Lotes Pendientes de Análisis</h3>
+      <table class="gloria-table" style="width: 100%;">
+        <thead>
+          <tr>
+            <th>Productor / Cuenca</th>
+            <th>Placa</th>
+            <th>Volumen</th>
+            <th>Acción</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let lote of pendientes">
+            <td>{{ lote.productor }}<br><small style="color: gray;">{{ lote.cuenca }}</small></td>
+            <td><b>{{ lote.placa_cisterna }}</b></td>
+            <td>{{ lote.volumen }} L</td>
+            <td>
+              <button (click)="seleccionarLote(lote)" style="background-color: var(--gloria-blue-primary); color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 12px;">
+                Analizar
+              </button>
+            </td>
+          </tr>
+          <tr *ngIf="pendientes.length === 0">
+            <td colspan="4" style="text-align: center; color: var(--text-muted);">No hay lotes pendientes</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Formulario de Análisis -->
+    <div *ngIf="selectedLote" class="gloria-card" style="width: 350px; padding: 20px; border-top: 4px solid var(--gloria-blue-primary);">
+      <h3 style="margin-top: 0; color: var(--gloria-blue-primary); font-size: 16px;">Resultados de Laboratorio</h3>
+      <p style="font-size: 13px; color: gray; margin-bottom: 16px;">
+        Evaluando cisterna <b>{{ selectedLote.placa_cisterna }}</b> de {{ selectedLote.productor }} ({{ selectedLote.volumen }}L)
+      </p>
+
+      <form (ngSubmit)="onSubmit()" #labForm="ngForm">
+        <div style="margin-bottom: 12px;">
+          <label style="display: block; font-size: 13px; font-weight: 600; margin-bottom: 4px;">Acidez (°D)</label>
+          <input type="number" step="0.1" [(ngModel)]="formData.acidez" name="acidez" required
+                 style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box;" placeholder="Ej: 15.5">
+          <small style="color: gray; font-size: 11px;">Rango óptimo: 14 - 17</small>
+        </div>
+
+        <div style="margin-bottom: 12px;">
+          <label style="display: block; font-size: 13px; font-weight: 600; margin-bottom: 4px;">Grasa (%)</label>
+          <input type="number" step="0.1" [(ngModel)]="formData.grasa" name="grasa" required
+                 style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box;" placeholder="Ej: 3.5">
+          <small style="color: gray; font-size: 11px;">Mínimo: 3.2</small>
+        </div>
+
+        <div style="margin-bottom: 12px;">
+          <label style="display: block; font-size: 13px; font-weight: 600; margin-bottom: 4px;">Densidad (g/ml)</label>
+          <input type="number" step="0.001" [(ngModel)]="formData.densidad" name="densidad" required
+                 style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box;" placeholder="Ej: 1.030">
+          <small style="color: gray; font-size: 11px;">Rango: 1.028 - 1.033</small>
+        </div>
+
+        <div style="margin-bottom: 20px;">
+          <label style="display: block; font-size: 13px; font-weight: 600; margin-bottom: 4px;">Prueba de Antibióticos</label>
+          <select [(ngModel)]="formData.antibioticos" name="antibioticos" required
+                  style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box;">
+            <option value="Negativo">Negativo</option>
+            <option value="Positivo">Positivo (Rechazo inmediato)</option>
+          </select>
+        </div>
+
+        <div style="display: flex; gap: 8px;">
+          <button type="button" (click)="cancelar()"
+                  style="flex: 1; background: #eee; border: none; padding: 10px; border-radius: 4px; cursor: pointer; font-weight: 600;">
+            Cancelar
+          </button>
+          <button type="submit" [disabled]="!labForm.valid || isSubmitting"
+                  style="flex: 2; background: var(--gloria-blue-primary); color: white; border: none; padding: 10px; border-radius: 4px; cursor: pointer; font-weight: 600;"
+                  [style.opacity]="!labForm.valid || isSubmitting ? '0.6' : '1'">
+            {{ isSubmitting ? 'Enviando...' : 'Guardar y Evaluar' }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

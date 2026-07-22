@@ -1,0 +1,110 @@
+<div style="display: flex; min-height: 100vh;">
+  
+  <!-- Sidebar dinámico -->
+  <aside style="width: 260px; background-color: var(--gloria-blue-primary); color: white; padding: 24px; display: flex; flex-direction: column; justify-content: space-between;">
+    <div>
+      <h3 style="font-size: 20px; border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 12px; margin-bottom: 20px;">
+        GLORIA OPERADOR
+      </h3>
+      <nav style="display: flex; flex-direction: column; gap: 8px;">
+        <button 
+          (click)="selectTab('resumen')" 
+          [style.background]="activeTab === 'resumen' ? 'rgba(255,255,255,0.2)' : 'transparent'"
+          style="border: none; color: white; padding: 12px; border-radius: var(--radius); text-align: left; cursor: pointer; font-size: 14px; font-weight: 600;">
+          📊 Dashboard Operativo
+        </button>
+
+        <button 
+          (click)="selectTab('acopio')" 
+          [style.background]="activeTab === 'acopio' ? 'rgba(255,255,255,0.2)' : 'transparent'"
+          style="border: none; color: white; padding: 12px; border-radius: var(--radius); text-align: left; cursor: pointer; font-size: 14px; font-weight: 600;">
+          🚚 Nuevo Acopio
+        </button>
+
+        <button 
+          (click)="selectTab('laboratorio')" 
+          [style.background]="activeTab === 'laboratorio' ? 'rgba(255,255,255,0.2)' : 'transparent'"
+          style="border: none; color: white; padding: 12px; border-radius: var(--radius); text-align: left; cursor: pointer; font-size: 14px; font-weight: 600;">
+          🔬 Laboratorio
+        </button>
+      </nav>
+    </div>
+
+    <button (click)="logout()" class="btn-primary" style="background-color: var(--gloria-red-accent);">Cerrar Sesión</button>
+  </aside>
+
+  <!-- Contenido Principal Dinámico -->
+  <main style="flex: 1; padding: 32px; background-color: var(--bg-main);">
+    
+    <!-- PESTAÑA 1: RESUMEN OPERATIVO -->
+    <div *ngIf="activeTab === 'resumen'" style="animation: fadeIn 0.3s ease-in-out;">
+      <header style="margin-bottom: 24px; display: flex; justify-content: space-between; align-items: center;">
+        <div>
+          <h1 style="color: var(--gloria-blue-primary); font-size: 24px;">Mi Turno (Acopio y Lab)</h1>
+          <p style="color: var(--text-muted);">Métricas en tiempo real basadas en tus registros</p>
+        </div>
+        <button (click)="exportPdf()" style="background-color: var(--gloria-red-accent); color: white; padding: 8px 16px; border: none; border-radius: 4px; cursor: pointer; font-weight: bold;">
+          📄 Exportar PDF
+        </button>
+      </header>
+
+      <!-- KPIs -->
+      <section style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; margin-bottom: 32px;">
+        <div class="gloria-card">
+          <span style="color: var(--text-muted); font-size: 13px; font-weight: 600;">Cisternas Recibidas Hoy</span>
+          <h2 style="font-size: 28px; color: var(--gloria-blue-primary); margin: 8px 0;">{{ stats?.hoy?.cantidad || 0 }}</h2>
+          <span class="badge badge-success">Operaciones registradas</span>
+        </div>
+
+        <div class="gloria-card">
+          <span style="color: var(--text-muted); font-size: 13px; font-weight: 600;">Volumen Total del Día</span>
+          <h2 style="font-size: 28px; color: var(--gloria-blue-primary); margin: 8px 0;">{{ stats?.hoy?.volumen_total || 0 | number:'1.2-2' }} L</h2>
+          <span class="badge badge-success">Ingresado a planta</span>
+        </div>
+      </section>
+
+      <section style="display: grid; grid-template-columns: 2fr 3fr; gap: 20px;">
+        <!-- Gráfico -->
+        <div class="gloria-card" style="padding: 20px;">
+          <h3 style="margin-top: 0; color: var(--gloria-blue-primary); font-size: 16px;">Volumen Recibido (Últimos 7 días)</h3>
+          <canvas #chartCanvas style="width: 100%; height: 300px;"></canvas>
+        </div>
+
+        <!-- Tabla -->
+        <div class="gloria-card" style="padding: 20px; overflow-x: auto;">
+          <h3 style="margin-top: 0; color: var(--gloria-blue-primary); font-size: 16px;">Últimos Ingresos Hoy</h3>
+          <table class="gloria-table" style="width: 100%;">
+            <thead>
+              <tr>
+                <th>Productor</th>
+                <th>Cuenca</th>
+                <th>Placa</th>
+                <th>Volumen</th>
+                <th>Hora</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let cisterna of stats.ultimasCisternas">
+                <td>{{ cisterna.productor }}</td>
+                <td>{{ cisterna.cuenca }}</td>
+                <td><b>{{ cisterna.placa_cisterna }}</b></td>
+                <td>{{ cisterna.volumen }} L</td>
+                <td>{{ cisterna.hora }}</td>
+              </tr>
+              <tr *ngIf="!stats.ultimasCisternas || stats.ultimasCisternas.length === 0">
+                <td colspan="5" style="text-align: center; color: var(--text-muted);">No hay ingresos registrados hoy</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+
+    <!-- PESTAÑA 2: CONTROL ACOPIO -->
+    <app-acopio *ngIf="activeTab === 'acopio'"></app-acopio>
+
+    <!-- PESTAÑA 3: LABORATORIO ISO -->
+    <app-laboratorio *ngIf="activeTab === 'laboratorio'"></app-laboratorio>
+
+  </main>
+</div>
