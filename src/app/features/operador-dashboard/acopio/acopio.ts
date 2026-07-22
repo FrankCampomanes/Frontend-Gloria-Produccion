@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Output, EventEmitter, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
@@ -10,6 +10,10 @@ import { FormsModule } from '@angular/forms';
   styleUrl: './acopio.css',
 })
 export class Acopio {
+  @Output() onAcopioRegistrado = new EventEmitter<void>();
+  
+  constructor(private cdr: ChangeDetectorRef) {}
+
   formData = {
     productor: '',
     cuenca: '',
@@ -28,6 +32,7 @@ export class Acopio {
     this.isSubmitting = true;
     this.successMessage = '';
     this.errorMessage = '';
+    this.cdr.detectChanges();
 
     try {
       const res = await fetch('http://localhost:3000/api/entregas', {
@@ -38,6 +43,7 @@ export class Acopio {
 
       if (res.ok) {
         this.successMessage = 'Acopio registrado correctamente. Ya está en estado "Pendiente de Análisis".';
+        this.onAcopioRegistrado.emit();
         // Reset form
         this.formData = {
           productor: '',
@@ -56,6 +62,7 @@ export class Acopio {
       this.errorMessage = 'Error de conexión con el servidor.';
     } finally {
       this.isSubmitting = false;
+      this.cdr.detectChanges();
     }
   }
 }

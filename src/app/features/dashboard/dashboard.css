@@ -1,0 +1,1 @@
+@media print { aside { display: none !important; } header button { display: none !important; } div[style*="gap: 16px"] { display: none !important; } main { padding: 0 !important; margin: 0 !important; background: white !important; } table { page-break-inside: auto; } tr { page-break-inside: avoid; page-break-after: auto; } thead { display: table-header-group; } }

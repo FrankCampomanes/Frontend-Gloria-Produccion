@@ -101,7 +101,7 @@
     </div>
 
     <!-- PESTAÑA 2: CONTROL ACOPIO -->
-    <app-acopio *ngIf="activeTab === 'acopio'"></app-acopio>
+    <app-acopio *ngIf="activeTab === 'acopio'" (onAcopioRegistrado)="onRegistroActualizado()"></app-acopio>
 
     <!-- PESTAÑA 3: LABORATORIO ISO -->
     <app-laboratorio *ngIf="activeTab === 'laboratorio'"></app-laboratorio>

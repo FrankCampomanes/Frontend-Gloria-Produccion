@@ -1,4 +1,4 @@
-import { Component, OnInit, ElementRef, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild, AfterViewInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../core/services/auth';
@@ -35,10 +35,11 @@ export class Dashboard implements OnInit, AfterViewInit {
   loteSeleccionado: any = null;
   razonRechazo: string = '';
 
-  constructor(private authService: AuthService) {}
+  constructor(private authService: AuthService, private cdr: ChangeDetectorRef) {}
 
   ngOnInit(): void {
     this.fetchStats();
+    this.fetchEntregas();
   }
 
   ngAfterViewInit() {
@@ -49,6 +50,7 @@ export class Dashboard implements OnInit, AfterViewInit {
     try {
       const res = await fetch('http://localhost:3000/api/entregas/admin/stats');
       this.stats = await res.json();
+      this.cdr.detectChanges();
       this.renderCharts();
     } catch (e) {
       console.error('Error fetching admin stats', e);
@@ -57,12 +59,13 @@ export class Dashboard implements OnInit, AfterViewInit {
 
   async fetchEntregas() {
     try {
-      let url = `http://localhost:3000/api/entregas?estado=\${this.filtroEstado}`;
+      let url = `http://localhost:3000/api/entregas?estado=${this.filtroEstado}`;
       if (this.filtroBusqueda) {
-        url += `&buscar=\${this.filtroBusqueda}`;
+        url += `&buscar=${this.filtroBusqueda}`;
       }
       const res = await fetch(url);
       this.entregas = await res.json();
+      this.cdr.detectChanges();
     } catch (e) {
       console.error('Error fetching entregas', e);
     }
@@ -138,14 +141,14 @@ export class Dashboard implements OnInit, AfterViewInit {
     }
 
     try {
-      const res = await fetch(`http://localhost:3000/api/entregas/\${lote.id}/dictamen`, {
+      const res = await fetch(`http://localhost:3000/api/entregas/${lote.id}/dictamen`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ estado, razon_rechazo: estado === 'Rechazado' ? this.razonRechazo : null })
       });
 
       if (res.ok) {
-        alert(`Lote \${estado} exitosamente.`);
+        alert(`Lote ${estado} exitosamente.`);
         this.cerrarModal();
         this.fetchEntregas(); // Refrescar tabla
       }

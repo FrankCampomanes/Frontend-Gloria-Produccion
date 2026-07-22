@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
@@ -13,6 +13,8 @@ export class Laboratorio implements OnInit {
   pendientes: any[] = [];
   selectedLote: any = null;
   
+  constructor(private cdr: ChangeDetectorRef) {}
+
   formData = {
     acidez: null,
     grasa: null,
@@ -31,6 +33,7 @@ export class Laboratorio implements OnInit {
     try {
       const res = await fetch('http://localhost:3000/api/entregas/pendientes');
       this.pendientes = await res.json();
+      this.cdr.detectChanges();
     } catch (e) {
       console.error('Error fetching pendientes', e);
     }
@@ -54,6 +57,7 @@ export class Laboratorio implements OnInit {
   async onSubmit() {
     if (!this.selectedLote) return;
     this.isSubmitting = true;
+    this.cdr.detectChanges();
     
     try {
       const res = await fetch(`http://localhost:3000/api/entregas/${this.selectedLote.id}/analisis`, {
@@ -73,6 +77,7 @@ export class Laboratorio implements OnInit {
       alert('Error al registrar análisis');
     } finally {
       this.isSubmitting = false;
+      this.cdr.detectChanges();
     }
   }
 }

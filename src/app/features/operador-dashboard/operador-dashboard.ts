@@ -1,4 +1,4 @@
-import { Component, OnInit, ElementRef, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild, AfterViewInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../core/services/auth';
@@ -25,7 +25,7 @@ export class OperadorDashboard implements OnInit, AfterViewInit {
     grafico: []
   };
 
-  constructor(private authService: AuthService) {}
+  constructor(private authService: AuthService, private cdr: ChangeDetectorRef) {}
 
   ngOnInit(): void {
     this.fetchStats();
@@ -39,6 +39,7 @@ export class OperadorDashboard implements OnInit, AfterViewInit {
     try {
       const res = await fetch('http://localhost:3000/api/entregas/operador/stats');
       this.stats = await res.json();
+      this.cdr.detectChanges();
       this.renderChart();
     } catch (e) {
       console.error('Error fetching stats', e);
@@ -87,6 +88,10 @@ export class OperadorDashboard implements OnInit, AfterViewInit {
       this.fetchStats();
       setTimeout(() => this.renderChart(), 100);
     }
+  }
+
+  onRegistroActualizado() {
+    this.selectTab('resumen');
   }
 
   exportPdf() {
