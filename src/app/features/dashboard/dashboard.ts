@@ -57,9 +57,9 @@ export class Dashboard implements OnInit, AfterViewInit {
 
   async fetchEntregas() {
     try {
-      let url = \`http://localhost:3000/api/entregas?estado=\${this.filtroEstado}\`;
+      let url = `http://localhost:3000/api/entregas?estado=\${this.filtroEstado}`;
       if (this.filtroBusqueda) {
-        url += \`&buscar=\${this.filtroBusqueda}\`;
+        url += `&buscar=\${this.filtroBusqueda}`;
       }
       const res = await fetch(url);
       this.entregas = await res.json();
@@ -138,14 +138,14 @@ export class Dashboard implements OnInit, AfterViewInit {
     }
 
     try {
-      const res = await fetch(\`http://localhost:3000/api/entregas/\${lote.id}/dictamen\`, {
+      const res = await fetch(`http://localhost:3000/api/entregas/\${lote.id}/dictamen`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ estado, razon_rechazo: estado === 'Rechazado' ? this.razonRechazo : null })
       });
 
       if (res.ok) {
-        alert(\`Lote \${estado} exitosamente.\`);
+        alert(`Lote \${estado} exitosamente.`);
         this.cerrarModal();
         this.fetchEntregas(); // Refrescar tabla
       }
